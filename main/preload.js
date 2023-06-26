@@ -1,9 +1,9 @@
-const { ipcRenderer, contextBridge } = require('electron')
+const { contextBridge, ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld('electron', {
-  message: {
-    send: (payload) => ipcRenderer.send('message', payload),
-    on: (handler) => ipcRenderer.on('message', handler),
-    off: (handler) => ipcRenderer.off('message', handler),
-  },
-})
+contextBridge.exposeInMainWorld("electron", {
+  node: () => process.versions.node,
+  chrome: () => process.versions.chrome,
+  electron: () => process.versions.electron,
+  minimize: () => ipcRenderer.invoke("minimize"),
+  close: () => ipcRenderer.invoke("close"),
+});

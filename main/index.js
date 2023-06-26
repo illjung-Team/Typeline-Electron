@@ -1,40 +1,46 @@
-// Native
-const { join } = require('path')
-const { format } = require('url')
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
 
-// Packages
-const { BrowserWindow, app, ipcMain } = require('electron')
-const isDev = require('electron-is-dev')
-const prepareNext = require('electron-next')
-
-// Prepare the renderer once the app is ready
-app.on('ready', async () => {
-  await prepareNext('./renderer')
-
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 854,
+    height: 480,
+    frame: false,
+    resizable: true,
     webPreferences: {
-      nodeIntegration: false,
-      preload: join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, "preload.js"),
+      // nodeIntegration: false,
+      // contextIsolation: false,
     },
-  })
+  });
 
-  const url = isDev
-    ? 'http://localhost:8000'
-    : format({
-        pathname: join(__dirname, '../renderer/out/index.html'),
-        protocol: 'file:',
-        slashes: true,
-      })
+  ipcMain.handle("minimize", () => {
+    win.minimize();
+  });
 
-  mainWindow.loadURL(url)
-})
+  ipcMain.handle("close", () => {
+    win.close();
+  });
 
-// Quit the app once all windows are closed
-app.on('window-all-closed', app.quit)
+  const url = "https://typeline-client.vercel.app";
 
-// listen the channel `message` and resend the received message to the renderer process
-ipcMain.on('message', (event, message) => {
-  event.sender.send('message', message)
-})
+  win.loadURL(url);
+}
+
+app.whenReady().then(() => {
+  createWindow();
+});
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});
+
+app.on("activate", () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
+});
+
+app.allowRendererProcessReuse = true;

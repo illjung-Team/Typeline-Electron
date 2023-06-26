@@ -2,9 +2,11 @@
   "private": true,
   "productName": "ElectronNext",
   "main": "main/index.js",
+  "author": "Your Name",
+  "description": "Your package description",
   "scripts": {
     "clean": "rimraf dist renderer/.next renderer/out",
-    "start": "electron .",
+    "electron": "electron .",
     "build": "next build renderer",
     "pack-app": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder"
