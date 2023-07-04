@@ -29,12 +29,7 @@ const Calendarbox: any = () => {
   const getmonthfetcher = () =>
     api
       .get(`schedule/month`, {
-        params: {
-          ...getmonthparams(),
-        },
-        data: {
-          user_id: session.user.id,
-        },
+        params: { ...getmonthparams(), userId: session.user.id },
       })
       .then((res) => res.data)
       .catch((error) => error.response.status === 404 && []);

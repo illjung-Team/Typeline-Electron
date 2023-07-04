@@ -24,6 +24,14 @@ function createWindow() {
 
   const url = "https://typeline-client.vercel.app";
 
+  // const url = isDev
+  // ? 'http://localhost:8000'
+  // : format({
+  //     pathname: join(__dirname, '../renderer/out/index.html'),
+  //     protocol: 'file:',
+  //     slashes: true,
+  //   })
+
   win.loadURL(url);
 }
 

@@ -21,10 +21,7 @@ function Home() {
   const getdayfetcher = (url: any) =>
     api
       .get(`schedule/day`, {
-        params: getdayparams(),
-        data: {
-          user_id: session.user.id,
-        },
+        params: { ...getdayparams(), userId: session.user.id },
       })
       .then((res: any) => res.data)
       .catch((error) => error.response.status === 404 && []);
@@ -52,16 +49,6 @@ function Home() {
     api.post(`schedule`, body).then((res) => {
       console.log(res.data);
     });
-  // const postfetcher = async () =>
-  //   api
-  //     .post(`schedule`, {
-  //       ...getdayparams(),
-  //       user_id: session.user.id,
-  //       memo: content,
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     });
 
   const focusInput = () => {
     inputRef.current.focus();
